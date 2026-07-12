@@ -475,16 +475,12 @@
 <div class="login-overlay" id="loginOverlay">
   <div class="login-card">
     <h2>Синхронизация прогресса</h2>
-    <p>Войди по email, чтобы прогресс сохранялся на сервере и открывался с любого устройства. Без пароля — код придёт на почту.</p>
+    <p>Придумай email и пароль (можно любой email, даже несуществующий, если "Confirm email" выключен в Supabase) — прогресс будет сохраняться на сервере и открываться с любого устройства.</p>
     <div id="loginStep1">
-      <input type="email" id="loginEmail" placeholder="твой email" autocomplete="email">
-      <button id="btnSendCode">Прислать ссылку</button>
-    </div>
-    <div id="loginStep2" style="display:none;">
-      <p style="margin:0 0 6px;font-size:13px;">Проверь почту и перейди по ссылке из письма — вернёшься сюда уже залогиненным. Если письмо не пришло за пару минут — глянь спам.</p>
-      <p style="margin:0;font-size:12px;">Или, если в письме всё же есть код, введи его здесь:</p>
-      <input type="text" id="loginCode" placeholder="код из письма (если есть)" inputmode="numeric" maxlength="6">
-      <button id="btnVerifyCode">Войти по коду</button>
+      <input type="email" id="loginEmail" placeholder="email" autocomplete="email">
+      <input type="password" id="loginPassword" placeholder="пароль (минимум 6 символов)" autocomplete="current-password">
+      <button id="btnSignIn">Войти</button>
+      <button id="btnSignUp" style="margin-top:8px;background:var(--bg-card);color:var(--text);border:1px solid var(--border);">Создать аккаунт (первый раз)</button>
     </div>
     <div class="msg" id="loginMsg"></div>
     <button class="skip" id="btnSkipLogin">Пропустить, хранить только в этом браузере</button>
@@ -901,8 +897,6 @@
 
   // --- auth / sync ---
   var overlay = document.getElementById('loginOverlay');
-  var step1 = document.getElementById('loginStep1');
-  var step2 = document.getElementById('loginStep2');
   var msgEl = document.getElementById('loginMsg');
 
   function showMsg(text, kind) {
@@ -956,29 +950,34 @@
       }
     });
 
-    document.getElementById('btnSendCode').addEventListener('click', function () {
+    document.getElementById('btnSignIn').addEventListener('click', function () {
       var email = document.getElementById('loginEmail').value.trim();
-      if (!email) { showMsg('Введи email', 'err'); return; }
-      showMsg('Отправляю…');
-      var redirectTo = window.location.origin + window.location.pathname;
-      sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true, emailRedirectTo: redirectTo } }).then(function (res) {
+      var password = document.getElementById('loginPassword').value;
+      if (!email || !password) { showMsg('Введи email и пароль', 'err'); return; }
+      showMsg('Вхожу…');
+      sb.auth.signInWithPassword({ email: email, password: password }).then(function (res) {
         if (res.error) { showMsg(res.error.message, 'err'); return; }
-        step1.style.display = 'none';
-        step2.style.display = 'block';
-        showMsg('Письмо отправлено на ' + email, 'ok');
+        sessionStorage.removeItem('jp-synced');
+        showMsg('Готово', 'ok');
+        afterLogin(res.data.user);
       });
     });
 
-    document.getElementById('btnVerifyCode').addEventListener('click', function () {
+    document.getElementById('btnSignUp').addEventListener('click', function () {
       var email = document.getElementById('loginEmail').value.trim();
-      var code = document.getElementById('loginCode').value.trim();
-      if (!code) { showMsg('Введи код из письма', 'err'); return; }
-      showMsg('Проверяю…');
-      sb.auth.verifyOtp({ email: email, token: code, type: 'email' }).then(function (res) {
+      var password = document.getElementById('loginPassword').value;
+      if (!email || !password) { showMsg('Введи email и пароль', 'err'); return; }
+      if (password.length < 6) { showMsg('Пароль минимум 6 символов', 'err'); return; }
+      showMsg('Создаю аккаунт…');
+      sb.auth.signUp({ email: email, password: password }).then(function (res) {
         if (res.error) { showMsg(res.error.message, 'err'); return; }
+        if (!res.data.session) {
+          showMsg('Аккаунт создан, но нужно подтвердить email по письму (если это включено в настройках Supabase). Если письмо не нужно — просто войди кнопкой "Войти".', 'ok');
+          return;
+        }
         sessionStorage.removeItem('jp-synced');
-        showMsg('Готово, входим…', 'ok');
-        afterLogin(res.data.user);
+        showMsg('Готово', 'ok');
+        afterLogin(res.data.session.user);
       });
     });
 
