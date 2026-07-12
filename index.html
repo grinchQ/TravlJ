@@ -464,6 +464,15 @@
       <div class="updated" id="m-jlpt-u"></div>
     </div>
     <div class="metric">
+      <label for="m-english">Английский язык</label>
+      <select id="m-english">
+        <option value="zero" selected>С нуля</option>
+        <option value="basic">Базовый разговорный</option>
+        <option value="confident">Уверенный</option>
+      </select>
+      <div class="updated" id="m-english-u"></div>
+    </div>
+    <div class="metric">
       <label for="m-biz">Онлайн-бизнес</label>
       <select id="m-biz">
         <option value="idea">Только идея</option>
@@ -742,7 +751,7 @@
   if (PHASES[0]) document.getElementById(PHASES[0].id).classList.add('open');
 
   // metrics
-  var metricFields = ['m-debt', 'm-ban', 'm-bankr', 'm-savings', 'm-jlpt', 'm-biz'];
+  var metricFields = ['m-debt', 'm-ban', 'm-bankr', 'm-savings', 'm-jlpt', 'm-english', 'm-biz'];
   metricFields.forEach(function (id) {
     var el = document.getElementById(id);
     if (state.metrics[id] !== undefined) el.value = state.metrics[id];
