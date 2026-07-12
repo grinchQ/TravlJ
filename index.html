@@ -478,11 +478,13 @@
     <p>Войди по email, чтобы прогресс сохранялся на сервере и открывался с любого устройства. Без пароля — код придёт на почту.</p>
     <div id="loginStep1">
       <input type="email" id="loginEmail" placeholder="твой email" autocomplete="email">
-      <button id="btnSendCode">Прислать код</button>
+      <button id="btnSendCode">Прислать ссылку</button>
     </div>
     <div id="loginStep2" style="display:none;">
-      <input type="text" id="loginCode" placeholder="6-значный код из письма" inputmode="numeric" maxlength="6">
-      <button id="btnVerifyCode">Войти</button>
+      <p style="margin:0 0 6px;font-size:13px;">Проверь почту и перейди по ссылке из письма — вернёшься сюда уже залогиненным. Если письмо не пришло за пару минут — глянь спам.</p>
+      <p style="margin:0;font-size:12px;">Или, если в письме всё же есть код, введи его здесь:</p>
+      <input type="text" id="loginCode" placeholder="код из письма (если есть)" inputmode="numeric" maxlength="6">
+      <button id="btnVerifyCode">Войти по коду</button>
     </div>
     <div class="msg" id="loginMsg"></div>
     <button class="skip" id="btnSkipLogin">Пропустить, хранить только в этом браузере</button>
@@ -957,12 +959,13 @@
     document.getElementById('btnSendCode').addEventListener('click', function () {
       var email = document.getElementById('loginEmail').value.trim();
       if (!email) { showMsg('Введи email', 'err'); return; }
-      showMsg('Отправляю код…');
-      sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true } }).then(function (res) {
+      showMsg('Отправляю…');
+      var redirectTo = window.location.origin + window.location.pathname;
+      sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true, emailRedirectTo: redirectTo } }).then(function (res) {
         if (res.error) { showMsg(res.error.message, 'err'); return; }
         step1.style.display = 'none';
         step2.style.display = 'block';
-        showMsg('Код отправлен на ' + email + ' — проверь почту', 'ok');
+        showMsg('Письмо отправлено на ' + email, 'ok');
       });
     });
 
