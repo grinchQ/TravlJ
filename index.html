@@ -1,0 +1,995 @@
+<title>План переезда в Японию — трекер</title>
+<style>
+  :root {
+    --bg: #f7f0d6;
+    --bg-card: #fffcf1;
+    --text: #22190f;
+    --text-dim: #8a7a5f;
+    --border: #e6d6a8;
+    --accent: #b23a2e;
+    --accent-soft: #f7ded3;
+    --ok: #6b7f4a;
+    --ok-soft: #e7ecd9;
+    --warn: #c8a15a;
+    --warn-soft: #f3e6c5;
+    --danger: #932a20;
+    --danger-soft: #f5ddd3;
+    --track: #ecdfb2;
+    --decor: #c8a15a;
+    --decor-opacity: 0.16;
+    --shadow: 0 1px 2px rgba(34,25,15,0.08), 0 4px 16px rgba(34,25,15,0.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0a10;
+    --bg-card: #211a29;
+    --text: #f3edc9;
+    --text-dim: #a89bb5;
+    --border: #362c40;
+    --accent: #f1837d;
+    --accent-soft: #3a201d;
+    --ok: #93b877;
+    --ok-soft: #232d1c;
+    --warn: #e0b968;
+    --warn-soft: #3a3222;
+    --danger: #e07a7a;
+    --danger-soft: #3a2626;
+    --track: #332b3d;
+    --decor: #d8b567;
+    --decor-opacity: 0.1;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.35);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d0a10;
+      --bg-card: #211a29;
+      --text: #f3edc9;
+      --text-dim: #a89bb5;
+      --border: #362c40;
+      --accent: #f1837d;
+      --accent-soft: #3a201d;
+      --ok: #93b877;
+      --ok-soft: #232d1c;
+      --warn: #e0b968;
+      --warn-soft: #3a3222;
+      --danger: #e07a7a;
+      --danger-soft: #3a2626;
+      --track: #332b3d;
+      --decor: #d8b567;
+      --decor-opacity: 0.1;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 18px 80px;
+  }
+  header.top {
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(22px, 4vw, 30px);
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .overall {
+    margin-top: 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .overall-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .overall-top .num {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .bar {
+    height: 10px;
+    background: var(--track);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar > span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width .3s ease;
+    width: 0%;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 18px 0 24px;
+  }
+  .metric {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .metric label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .metric input, .metric select {
+    width: 100%;
+    font: inherit;
+    font-size: 15px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .metric .updated {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  section.phase {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .phase-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .phase-head:hover { background: var(--accent-soft); }
+  .phase-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .phase-title .name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .phase-title .months {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .phase-count {
+    font-size: 13px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .chevron {
+    transition: transform .2s ease;
+    color: var(--text-dim);
+    flex: none;
+  }
+  .phase.open .chevron { transform: rotate(90deg); }
+  .phase-bar {
+    height: 5px;
+    background: var(--track);
+  }
+  .phase-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--ok);
+    width: 0%;
+    transition: width .3s ease;
+  }
+  .phase-body {
+    display: none;
+    padding: 4px 18px 16px;
+  }
+  .phase.open .phase-body { display: block; }
+  .track-note {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 10px 0 4px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  ul.items {
+    list-style: none;
+    margin: 0 0 6px;
+    padding: 0;
+  }
+  ul.items li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  ul.items li:last-child { border-bottom: none; }
+  ul.items input[type="checkbox"] {
+    margin-top: 3px;
+    width: 17px;
+    height: 17px;
+    accent-color: var(--ok);
+    flex: none;
+  }
+  ul.items label {
+    font-size: 14.5px;
+    cursor: pointer;
+  }
+  ul.items li.checked label {
+    color: var(--text-dim);
+    text-decoration: line-through;
+  }
+
+  .risks {
+    display: grid;
+    gap: 12px;
+    margin: 22px 0;
+  }
+  .risk {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--warn);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .risk .rtitle {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 14.5px;
+  }
+  .risk p {
+    margin: 0 0 10px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+  }
+  .risk select {
+    font: inherit;
+    font-size: 13px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 26px;
+  }
+  button {
+    font: inherit;
+    font-size: 13.5px;
+    padding: 9px 14px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  button:hover { border-color: var(--accent); }
+  button.danger:hover { border-color: var(--danger); color: var(--danger); }
+  #fileInput { display: none; }
+
+  h2.section-heading {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-dim);
+    margin: 30px 0 10px;
+  }
+
+  footer {
+    margin-top: 34px;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  .overflow-scroll { overflow-x: auto; }
+
+  .authbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .authbar .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--ok);
+    margin-right: 6px;
+  }
+  .authbar.offline .dot { background: var(--danger); }
+  .authbar button {
+    padding: 4px 10px;
+    font-size: 12px;
+    box-shadow: none;
+  }
+
+  .login-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,10,16,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 16px;
+  }
+  .login-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 26px 24px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: var(--shadow);
+  }
+  .login-card h2 {
+    font-size: 18px;
+    margin: 0 0 6px;
+  }
+  .login-card p {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin: 0 0 16px;
+  }
+  .login-card input {
+    width: 100%;
+    font: inherit;
+    font-size: 15px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .login-card button {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+  }
+  .login-card .msg {
+    font-size: 12.5px;
+    margin-top: 10px;
+    min-height: 16px;
+  }
+  .login-card .msg.err { color: var(--danger); }
+  .login-card .msg.ok { color: var(--ok); }
+  .login-card .skip {
+    background: none;
+    color: var(--text-dim);
+    box-shadow: none;
+    margin-top: 8px;
+    font-size: 12px;
+    text-decoration: underline;
+  }
+
+  .bg-decor {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-decor svg {
+    position: absolute;
+    color: var(--decor);
+  }
+  .bg-decor .pagoda {
+    right: -40px;
+    bottom: -30px;
+    width: min(52vw, 480px);
+    height: auto;
+    opacity: var(--decor-opacity);
+  }
+  .bg-decor .sakura {
+    left: -20px;
+    top: -10px;
+    width: min(34vw, 300px);
+    height: auto;
+    opacity: var(--decor-opacity);
+    transform: scaleX(-1);
+  }
+</style>
+
+<div class="bg-decor" aria-hidden="true">
+  <svg class="pagoda" viewBox="0 0 320 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="160" y1="60" x2="160" y2="400" stroke="currentColor" stroke-width="2"/>
+    <rect x="120" y="360" width="80" height="40" stroke="currentColor" stroke-width="2"/>
+    <polygon points="90,360 230,360 210,335 110,335" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="132" y="295" width="56" height="40" stroke="currentColor" stroke-width="2"/>
+    <polygon points="106,295 214,295 197,272 123,272" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="138" y="235" width="44" height="37" stroke="currentColor" stroke-width="2"/>
+    <polygon points="116,235 204,235 189,214 131,214" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="143" y="180" width="34" height="34" stroke="currentColor" stroke-width="2"/>
+    <polygon points="124,180 196,180 184,161 136,161" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="148" y="130" width="24" height="30" stroke="currentColor" stroke-width="2"/>
+    <polygon points="132,130 188,130 178,112 142,112" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="160" y1="112" x2="160" y2="58" stroke="currentColor" stroke-width="2"/>
+    <circle cx="160" cy="52" r="6" stroke="currentColor" stroke-width="2"/>
+  </svg>
+  <svg class="sakura" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10,20 C60,40 90,70 120,110 C150,150 170,190 165,260" stroke="currentColor" stroke-width="2"/>
+    <path d="M120,110 C140,95 160,90 185,95" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M150,150 C170,140 190,140 210,150" stroke="currentColor" stroke-width="1.5"/>
+    <g stroke="currentColor" stroke-width="1.5">
+      <circle cx="185" cy="95" r="9"/>
+      <circle cx="205" cy="80" r="7"/>
+      <circle cx="210" cy="150" r="9"/>
+      <circle cx="230" cy="138" r="7"/>
+      <circle cx="70" cy="45" r="7"/>
+      <circle cx="95" cy="65" r="6"/>
+    </g>
+  </svg>
+</div>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <h2>Синхронизация прогресса</h2>
+    <p>Войди по email, чтобы прогресс сохранялся на сервере и открывался с любого устройства. Без пароля — код придёт на почту.</p>
+    <div id="loginStep1">
+      <input type="email" id="loginEmail" placeholder="твой email" autocomplete="email">
+      <button id="btnSendCode">Прислать код</button>
+    </div>
+    <div id="loginStep2" style="display:none;">
+      <input type="text" id="loginCode" placeholder="6-значный код из письма" inputmode="numeric" maxlength="6">
+      <button id="btnVerifyCode">Войти</button>
+    </div>
+    <div class="msg" id="loginMsg"></div>
+    <button class="skip" id="btnSkipLogin">Пропустить, хранить только в этом браузере</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <h1>🗾 План переезда в Японию</h1>
+    <p class="sub">24 месяца, начало — июль 2026. Отмечай выполненное, статусы обновляй по ходу дела.</p>
+    <div class="authbar offline" id="authbar">
+      <span><span class="dot"></span><span id="authbarText">не синхронизировано (только этот браузер)</span></span>
+      <button id="btnLogout" style="display:none;">Выйти</button>
+    </div>
+  </header>
+
+  <div class="overall">
+    <div class="overall-top">
+      <span>Общий прогресс</span>
+      <span class="num" id="overallPct">0%</span>
+    </div>
+    <div class="bar"><span id="overallBar"></span></div>
+  </div>
+
+  <h2 class="section-heading">Ключевые показатели</h2>
+  <div class="metrics">
+    <div class="metric">
+      <label for="m-debt">Сумма долга (₽)</label>
+      <input type="number" id="m-debt" value="1400000" step="1000">
+      <div class="updated" id="m-debt-u"></div>
+    </div>
+    <div class="metric">
+      <label for="m-ban">Запрет на выезд</label>
+      <select id="m-ban">
+        <option value="active">Действует</option>
+        <option value="lifted">Снят</option>
+        <option value="unknown">Не проверено</option>
+      </select>
+      <div class="updated" id="m-ban-u"></div>
+    </div>
+    <div class="metric">
+      <label for="m-bankr">Статус банкротства</label>
+      <select id="m-bankr">
+        <option value="not_started">Не начато</option>
+        <option value="lawyer">Консультация с юристом</option>
+        <option value="filed">Заявление подано</option>
+        <option value="restructuring">Реструктуризация долгов</option>
+        <option value="realization">Реализация имущества</option>
+        <option value="done">Завершено</option>
+      </select>
+      <div class="updated" id="m-bankr-u"></div>
+    </div>
+    <div class="metric">
+      <label for="m-savings">Накоплено ($)</label>
+      <input type="number" id="m-savings" value="0" step="100">
+      <div class="updated" id="m-savings-u"></div>
+    </div>
+    <div class="metric">
+      <label for="m-jlpt">Японский язык</label>
+      <select id="m-jlpt">
+        <option value="zero">С нуля</option>
+        <option value="studying">Учу, экзамен впереди</option>
+        <option value="n4">N4 / JFT-Basic сдан</option>
+      </select>
+      <div class="updated" id="m-jlpt-u"></div>
+    </div>
+    <div class="metric">
+      <label for="m-biz">Онлайн-бизнес</label>
+      <select id="m-biz">
+        <option value="idea">Только идея</option>
+        <option value="testing">Тестирую нишу</option>
+        <option value="income">Есть стабильный доход</option>
+      </select>
+      <div class="updated" id="m-biz-u"></div>
+    </div>
+  </div>
+
+  <h2 class="section-heading">Фазы плана</h2>
+  <div id="phases"></div>
+
+  <h2 class="section-heading">Развилки, которые могут сдвинуть сроки</h2>
+  <div class="risks">
+    <div class="risk">
+      <div class="rtitle">1. Запрет на выезд не снимается вовремя</div>
+      <p>Судебное банкротство не гарантирует автоматическое снятие запрета (позиция ВС РФ). Если тянется больше 12 месяцев — нужен отдельный юридический план.</p>
+      <select id="r-1">
+        <option value="ok">В норме</option>
+        <option value="watch">Под вопросом</option>
+        <option value="problem">Проблема</option>
+      </select>
+    </div>
+    <div class="risk">
+      <div class="rtitle">2. Онлайн-бизнес не выходит на доход</div>
+      <p>Если к 6-9 месяцу нет стабильного дохода — нужна подработка или пересмотр бюджета/сроков.</p>
+      <select id="r-2">
+        <option value="ok">В норме</option>
+        <option value="watch">Под вопросом</option>
+        <option value="problem">Проблема</option>
+      </select>
+    </div>
+    <div class="risk">
+      <div class="rtitle">3. $15,000 не набирается к вылету</div>
+      <p>Запасной план — самая дешёвая школа в регионе (не Токио), максимальное сокращение стартовых расходов.</p>
+      <select id="r-3">
+        <option value="ok">В норме</option>
+        <option value="watch">Под вопросом</option>
+        <option value="problem">Проблема</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button id="btnExport">⬇ Экспорт прогресса (JSON)</button>
+    <button id="btnImport">⬆ Импорт прогресса</button>
+    <button id="btnReset" class="danger">Сбросить всё</button>
+    <input type="file" id="fileInput" accept="application/json">
+  </div>
+
+  <footer>Данные синхронизируются через Supabase, если ты вошёл по email. Локальная копия в браузере — всегда как запасной вариант, плюс экспорт/импорт JSON.</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  var STORAGE_KEY = 'jp-move-tracker-v1';
+  var SUPABASE_URL = 'https://toagiskzhyvkuhhnnicw.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvYWdpc2t6aHl2a3VoaG5uaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NzIxNzksImV4cCI6MjA5OTQ0ODE3OX0.2uUHIshZoZzZsNr9i9WiAXYxaVu2CyVjSgsLMek4HPo';
+  var sb = (window.supabase && SUPABASE_URL.indexOf('supabase.co') > -1)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+  var currentUser = null;
+  var syncTimer = null;
+
+  var PHASES = [
+    {
+      id: 'p0',
+      name: 'Фаза 0 — Диагностика и разблокировка',
+      months: 'Месяц 1',
+      items: [
+        'Заказать выписку по всем исполнительным производствам (fssp.gov.ru + Госуслуги), зафиксировать сумму, кредитора, дату постановления о запрете на выезд',
+        'Консультация с арбитражным юристом: можно ли снять запрет на выезд отдельно от полного банкротства',
+        'Уточнить у юриста реалистичный срок судебного банкротства по своей сумме и составу долга',
+        'Уточнить риски по «подозрительным сделкам» за 3 года при накоплениях/тратах на визу',
+        'Завести трекер: сумма долга, статус запрета на выезд, статус банкротства — обновлять ежемесячно (см. виджет выше)'
+      ]
+    },
+    {
+      id: 'p1',
+      name: 'Фаза 1 — Параллельные треки',
+      months: 'Месяцы 1–6',
+      groups: [
+        { note: 'Юридический трек', items: [
+          'Подать заявление на банкротство (дата зависит от юриста)',
+          'Раз в месяц проверять статус запрета на выезд'
+        ]},
+        { note: 'Бизнес-трек', items: [
+          'Определить конкретную нишу онлайн-бизнеса',
+          'Поставить финансовую цель: стабильный ежемесячный доход X к месяцу 6',
+          'Контрольная точка месяц 3: есть ли первые признаки дохода',
+          'Контрольная точка месяц 6: если дохода нет вообще — пересмотр плана (подработка как страховка)'
+        ]},
+        { note: 'Языковой трек', items: [
+          'Начать изучение японского с нуля, цель — JLPT N4 или JFT-Basic',
+          'Подтянуть английский до разговорной базы (банки, документы, логистика)'
+        ]}
+      ]
+    },
+    {
+      id: 'p2',
+      name: 'Фаза 2 — Ускорение',
+      months: 'Месяцы 6–12',
+      items: [
+        'Юридический трек: прохождение процедуры банкротства, фиксация статуса запрета на выезд',
+        'Записаться и сдать JLPT N4 (Москва/СПб, ближайшая дата июль или декабрь)',
+        'Бизнес-трек: контрольная точка — устойчивый доход 3+ месяца подряд',
+        'Выбрать конкретную языковую школу в Японии (город подешевле — Фукуока/регионы вместо Токио)'
+      ]
+    },
+    {
+      id: 'p3',
+      name: 'Фаза 3 — Оформление',
+      months: 'Месяцы 12–18',
+      items: [
+        'Проверить: запрет на выезд снят? Если нет — отдельный план Б',
+        'Подать документы в выбранную языковую школу, получить приглашение',
+        'Школа подаёт на COE (Certificate of Eligibility) через Бюро иммиграции',
+        'Собрать финансовые доказательства для визы (выписки, подтверждение дохода от бизнеса)',
+        'Оплатить первый семестр/год обучения'
+      ]
+    },
+    {
+      id: 'p4',
+      name: 'Фаза 4 — Переезд',
+      months: 'Месяцы 18–24',
+      items: [
+        'Получить студенческую визу в консульстве',
+        'Купить билеты (прямых рейсов Москва–Токио нет — через 3-и страны)',
+        'Найти жильё в Японии на первые месяцы',
+        'Переезд',
+        'После прилёта: разобраться с правилами подработки/бизнеса на студенческом статусе (28 ч/нед, отдельная юр. проверка на месте)'
+      ]
+    }
+  ];
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : { checks: {}, metrics: {}, risks: {}, updated: {} };
+    } catch (e) {
+      return { checks: {}, metrics: {}, risks: {}, updated: {} };
+    }
+  }
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (currentUser && sb) {
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(pushRemote, 600);
+    }
+  }
+  function pushRemote() {
+    if (!sb || !currentUser) return;
+    sb.from('tracker_state').upsert({
+      user_id: currentUser.id,
+      data: state,
+      updated_at: new Date().toISOString()
+    }).then(function (res) {
+      if (res.error) {
+        setAuthbar(false, 'ошибка синхронизации: ' + res.error.message);
+      } else {
+        setAuthbar(true, currentUser.email);
+      }
+    });
+  }
+  function setAuthbar(online, text) {
+    var bar = document.getElementById('authbar');
+    var textEl = document.getElementById('authbarText');
+    var logoutBtn = document.getElementById('btnLogout');
+    if (online) {
+      bar.classList.remove('offline');
+      textEl.textContent = 'синхронизировано — ' + text;
+      logoutBtn.style.display = 'inline-block';
+    } else {
+      bar.classList.add('offline');
+      textEl.textContent = text || 'не синхронизировано (только этот браузер)';
+      logoutBtn.style.display = currentUser ? 'inline-block' : 'none';
+    }
+  }
+
+  var state = loadState();
+  state.checks = state.checks || {};
+  state.metrics = state.metrics || {};
+  state.risks = state.risks || {};
+  state.updated = state.updated || {};
+
+  var phasesEl = document.getElementById('phases');
+
+  function itemId(phaseId, idx) { return phaseId + '-i' + idx; }
+
+  PHASES.forEach(function (phase) {
+    var section = document.createElement('section');
+    section.className = 'phase';
+    section.id = phase.id;
+
+    var head = document.createElement('div');
+    head.className = 'phase-head';
+    head.innerHTML =
+      '<div class="phase-title"><span class="name">' + phase.name + '</span>' +
+      '<span class="months">' + phase.months + '</span></div>' +
+      '<div style="display:flex;align-items:center;gap:10px;">' +
+      '<span class="phase-count" data-count></span>' +
+      '<span class="chevron">▶</span></div>';
+    section.appendChild(head);
+
+    var bar = document.createElement('div');
+    bar.className = 'phase-bar';
+    bar.innerHTML = '<span data-bar></span>';
+    section.appendChild(bar);
+
+    var body = document.createElement('div');
+    body.className = 'phase-body';
+
+    var allIdx = 0;
+    function renderItems(items, note) {
+      if (note) {
+        var h = document.createElement('div');
+        h.className = 'track-note';
+        h.textContent = note;
+        body.appendChild(h);
+      }
+      var ul = document.createElement('ul');
+      ul.className = 'items';
+      items.forEach(function (text) {
+        var id = itemId(phase.id, allIdx++);
+        var li = document.createElement('li');
+        var checked = !!state.checks[id];
+        if (checked) li.className = 'checked';
+        li.innerHTML =
+          '<input type="checkbox" id="' + id + '" ' + (checked ? 'checked' : '') + '>' +
+          '<label for="' + id + '">' + text + '</label>';
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+    }
+
+    if (phase.groups) {
+      phase.groups.forEach(function (g) { renderItems(g.items, g.note); });
+    } else {
+      renderItems(phase.items);
+    }
+
+    section.appendChild(body);
+    phasesEl.appendChild(section);
+
+    head.addEventListener('click', function () {
+      section.classList.toggle('open');
+    });
+
+    body.addEventListener('change', function (e) {
+      if (e.target.type !== 'checkbox') return;
+      state.checks[e.target.id] = e.target.checked;
+      e.target.closest('li').classList.toggle('checked', e.target.checked);
+      saveState();
+      updateProgress();
+    });
+  });
+
+  function updateProgress() {
+    var totalAll = 0, checkedAll = 0;
+    PHASES.forEach(function (phase) {
+      var section = document.getElementById(phase.id);
+      var boxes = section.querySelectorAll('input[type="checkbox"]');
+      var total = boxes.length, checked = 0;
+      boxes.forEach(function (b) { if (b.checked) checked++; });
+      totalAll += total;
+      checkedAll += checked;
+      var pct = total ? Math.round((checked / total) * 100) : 0;
+      section.querySelector('[data-count]').textContent = checked + ' / ' + total;
+      section.querySelector('[data-bar]').style.width = pct + '%';
+    });
+    var overallPct = totalAll ? Math.round((checkedAll / totalAll) * 100) : 0;
+    document.getElementById('overallPct').textContent = overallPct + '%';
+    document.getElementById('overallBar').style.width = overallPct + '%';
+  }
+
+  // open first phase by default
+  if (PHASES[0]) document.getElementById(PHASES[0].id).classList.add('open');
+
+  // metrics
+  var metricFields = ['m-debt', 'm-ban', 'm-bankr', 'm-savings', 'm-jlpt', 'm-biz'];
+  metricFields.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (state.metrics[id] !== undefined) el.value = state.metrics[id];
+    var updEl = document.getElementById(id + '-u');
+    if (state.updated[id]) updEl.textContent = 'обновлено: ' + state.updated[id];
+    el.addEventListener('change', function () {
+      state.metrics[id] = el.value;
+      var now = new Date().toLocaleDateString('ru-RU');
+      state.updated[id] = now;
+      updEl.textContent = 'обновлено: ' + now;
+      saveState();
+    });
+  });
+
+  // risks
+  ['r-1', 'r-2', 'r-3'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (state.risks[id] !== undefined) el.value = state.risks[id];
+    el.addEventListener('change', function () {
+      state.risks[id] = el.value;
+      saveState();
+    });
+  });
+
+  // export / import / reset
+  document.getElementById('btnExport').addEventListener('click', function () {
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'japan-move-progress.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('btnImport').addEventListener('click', function () {
+    document.getElementById('fileInput').click();
+  });
+  document.getElementById('fileInput').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var imported = JSON.parse(reader.result);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
+        location.reload();
+      } catch (err) {
+        alert('Не удалось прочитать файл — проверь, что это тот самый JSON экспорта.');
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById('btnReset').addEventListener('click', function () {
+    if (confirm('Точно сбросить весь прогресс? Это нельзя отменить.')) {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+  });
+
+  updateProgress();
+
+  // --- auth / sync ---
+  var overlay = document.getElementById('loginOverlay');
+  var step1 = document.getElementById('loginStep1');
+  var step2 = document.getElementById('loginStep2');
+  var msgEl = document.getElementById('loginMsg');
+
+  function showMsg(text, kind) {
+    msgEl.textContent = text || '';
+    msgEl.className = 'msg' + (kind ? ' ' + kind : '');
+  }
+
+  function applyRemoteData(remoteData) {
+    state = remoteData;
+    state.checks = state.checks || {};
+    state.metrics = state.metrics || {};
+    state.risks = state.risks || {};
+    state.updated = state.updated || {};
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    sessionStorage.setItem('jp-synced', '1');
+    location.reload();
+  }
+
+  function afterLogin(user) {
+    currentUser = user;
+    overlay.style.display = 'none';
+    setAuthbar(true, user.email);
+    if (sessionStorage.getItem('jp-synced') === '1') return;
+    sb.from('tracker_state').select('data').eq('user_id', user.id).maybeSingle().then(function (res) {
+      if (res.error) {
+        setAuthbar(false, 'ошибка синхронизации: ' + res.error.message);
+        return;
+      }
+      if (res.data && res.data.data) {
+        var remoteStr = JSON.stringify(res.data.data);
+        var localStr = JSON.stringify(state);
+        if (remoteStr !== localStr) {
+          applyRemoteData(res.data.data);
+          return;
+        }
+        sessionStorage.setItem('jp-synced', '1');
+      } else {
+        sessionStorage.setItem('jp-synced', '1');
+        pushRemote();
+      }
+    });
+  }
+
+  if (sb) {
+    sb.auth.getSession().then(function (res) {
+      var session = res.data && res.data.session;
+      if (session && session.user) {
+        afterLogin(session.user);
+      } else if (localStorage.getItem('jp-skip-login') !== '1') {
+        overlay.style.display = 'flex';
+      }
+    });
+
+    document.getElementById('btnSendCode').addEventListener('click', function () {
+      var email = document.getElementById('loginEmail').value.trim();
+      if (!email) { showMsg('Введи email', 'err'); return; }
+      showMsg('Отправляю код…');
+      sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true } }).then(function (res) {
+        if (res.error) { showMsg(res.error.message, 'err'); return; }
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+        showMsg('Код отправлен на ' + email + ' — проверь почту', 'ok');
+      });
+    });
+
+    document.getElementById('btnVerifyCode').addEventListener('click', function () {
+      var email = document.getElementById('loginEmail').value.trim();
+      var code = document.getElementById('loginCode').value.trim();
+      if (!code) { showMsg('Введи код из письма', 'err'); return; }
+      showMsg('Проверяю…');
+      sb.auth.verifyOtp({ email: email, token: code, type: 'email' }).then(function (res) {
+        if (res.error) { showMsg(res.error.message, 'err'); return; }
+        sessionStorage.removeItem('jp-synced');
+        showMsg('Готово, входим…', 'ok');
+        afterLogin(res.data.user);
+      });
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', function () {
+      sb.auth.signOut().then(function () {
+        sessionStorage.removeItem('jp-synced');
+        location.reload();
+      });
+    });
+  }
+
+  document.getElementById('btnSkipLogin').addEventListener('click', function () {
+    localStorage.setItem('jp-skip-login', '1');
+    overlay.style.display = 'none';
+  });
+})();
+</script>
