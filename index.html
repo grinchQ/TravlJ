@@ -345,74 +345,6 @@
     margin-right: 6px;
   }
   .authbar.offline .dot { background: var(--danger); }
-  .authbar button {
-    padding: 4px 10px;
-    font-size: 12px;
-    box-shadow: none;
-  }
-
-  .login-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(13,10,16,0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    padding: 16px;
-  }
-  .login-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 26px 24px;
-    max-width: 360px;
-    width: 100%;
-    box-shadow: var(--shadow);
-  }
-  .login-card h2 {
-    font-size: 18px;
-    margin: 0 0 6px;
-  }
-  .login-card p {
-    font-size: 13.5px;
-    color: var(--text-dim);
-    margin: 0 0 16px;
-  }
-  .login-card input {
-    width: 100%;
-    font: inherit;
-    font-size: 15px;
-    padding: 9px 10px;
-    border-radius: 9px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    margin-bottom: 10px;
-  }
-  .login-card button {
-    width: 100%;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    font-weight: 600;
-  }
-  .login-card .msg {
-    font-size: 12.5px;
-    margin-top: 10px;
-    min-height: 16px;
-  }
-  .login-card .msg.err { color: var(--danger); }
-  .login-card .msg.ok { color: var(--ok); }
-  .login-card .skip {
-    background: none;
-    color: var(--text-dim);
-    box-shadow: none;
-    margin-top: 8px;
-    font-size: 12px;
-    text-decoration: underline;
-  }
-
   .bg-decor {
     position: fixed;
     inset: 0;
@@ -472,28 +404,12 @@
   </svg>
 </div>
 
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-card">
-    <h2>Синхронизация прогресса</h2>
-    <p>Придумай email и пароль (можно любой email, даже несуществующий, если "Confirm email" выключен в Supabase) — прогресс будет сохраняться на сервере и открываться с любого устройства.</p>
-    <div id="loginStep1">
-      <input type="email" id="loginEmail" placeholder="email" autocomplete="email">
-      <input type="password" id="loginPassword" placeholder="пароль (минимум 6 символов)" autocomplete="current-password">
-      <button id="btnSignIn">Войти</button>
-      <button id="btnSignUp" style="margin-top:8px;background:var(--bg-card);color:var(--text);border:1px solid var(--border);">Создать аккаунт (первый раз)</button>
-    </div>
-    <div class="msg" id="loginMsg"></div>
-    <button class="skip" id="btnSkipLogin">Пропустить, хранить только в этом браузере</button>
-  </div>
-</div>
-
 <div class="wrap">
   <header class="top">
     <h1>🗾 План переезда в Японию</h1>
     <p class="sub">24 месяца, начало — июль 2026. Отмечай выполненное, статусы обновляй по ходу дела.</p>
     <div class="authbar offline" id="authbar">
-      <span><span class="dot"></span><span id="authbarText">не синхронизировано (только этот браузер)</span></span>
-      <button id="btnLogout" style="display:none;">Выйти</button>
+      <span><span class="dot"></span><span id="authbarText">подключаюсь…</span></span>
     </div>
   </header>
 
@@ -611,7 +527,6 @@
   var sb = (window.supabase && SUPABASE_URL.indexOf('supabase.co') > -1)
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
-  var currentUser = null;
   var syncTimer = null;
 
   var PHASES = [
@@ -695,37 +610,35 @@
   }
   function saveState() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    if (currentUser && sb) {
+    if (sb) {
       clearTimeout(syncTimer);
       syncTimer = setTimeout(pushRemote, 600);
     }
   }
+  var SHARED_ROW_ID = 'max';
   function pushRemote() {
-    if (!sb || !currentUser) return;
+    if (!sb) return;
     sb.from('tracker_state').upsert({
-      user_id: currentUser.id,
+      id: SHARED_ROW_ID,
       data: state,
       updated_at: new Date().toISOString()
     }).then(function (res) {
       if (res.error) {
         setAuthbar(false, 'ошибка синхронизации: ' + res.error.message);
       } else {
-        setAuthbar(true, currentUser.email);
+        setAuthbar(true, 'синхронизировано');
       }
     });
   }
   function setAuthbar(online, text) {
     var bar = document.getElementById('authbar');
     var textEl = document.getElementById('authbarText');
-    var logoutBtn = document.getElementById('btnLogout');
     if (online) {
       bar.classList.remove('offline');
-      textEl.textContent = 'синхронизировано — ' + text;
-      logoutBtn.style.display = 'inline-block';
+      textEl.textContent = text;
     } else {
       bar.classList.add('offline');
       textEl.textContent = text || 'не синхронизировано (только этот браузер)';
-      logoutBtn.style.display = currentUser ? 'inline-block' : 'none';
     }
   }
 
@@ -896,14 +809,6 @@
   updateProgress();
 
   // --- auth / sync ---
-  var overlay = document.getElementById('loginOverlay');
-  var msgEl = document.getElementById('loginMsg');
-
-  function showMsg(text, kind) {
-    msgEl.textContent = text || '';
-    msgEl.className = 'msg' + (kind ? ' ' + kind : '');
-  }
-
   function applyRemoteData(remoteData) {
     state = remoteData;
     state.checks = state.checks || {};
@@ -911,16 +816,11 @@
     state.risks = state.risks || {};
     state.updated = state.updated || {};
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    sessionStorage.setItem('jp-synced', '1');
     location.reload();
   }
 
-  function afterLogin(user) {
-    currentUser = user;
-    overlay.style.display = 'none';
-    setAuthbar(true, user.email);
-    if (sessionStorage.getItem('jp-synced') === '1') return;
-    sb.from('tracker_state').select('data').eq('user_id', user.id).maybeSingle().then(function (res) {
+  if (sb) {
+    sb.from('tracker_state').select('data').eq('id', SHARED_ROW_ID).maybeSingle().then(function (res) {
       if (res.error) {
         setAuthbar(false, 'ошибка синхронизации: ' + res.error.message);
         return;
@@ -932,66 +832,14 @@
           applyRemoteData(res.data.data);
           return;
         }
-        sessionStorage.setItem('jp-synced', '1');
+        setAuthbar(true, 'синхронизировано');
       } else {
-        sessionStorage.setItem('jp-synced', '1');
+        setAuthbar(true, 'синхронизировано');
         pushRemote();
       }
     });
+  } else {
+    setAuthbar(false, 'работает только локально (Supabase не настроен)');
   }
-
-  if (sb) {
-    sb.auth.getSession().then(function (res) {
-      var session = res.data && res.data.session;
-      if (session && session.user) {
-        afterLogin(session.user);
-      } else if (localStorage.getItem('jp-skip-login') !== '1') {
-        overlay.style.display = 'flex';
-      }
-    });
-
-    document.getElementById('btnSignIn').addEventListener('click', function () {
-      var email = document.getElementById('loginEmail').value.trim();
-      var password = document.getElementById('loginPassword').value;
-      if (!email || !password) { showMsg('Введи email и пароль', 'err'); return; }
-      showMsg('Вхожу…');
-      sb.auth.signInWithPassword({ email: email, password: password }).then(function (res) {
-        if (res.error) { showMsg(res.error.message, 'err'); return; }
-        sessionStorage.removeItem('jp-synced');
-        showMsg('Готово', 'ok');
-        afterLogin(res.data.user);
-      });
-    });
-
-    document.getElementById('btnSignUp').addEventListener('click', function () {
-      var email = document.getElementById('loginEmail').value.trim();
-      var password = document.getElementById('loginPassword').value;
-      if (!email || !password) { showMsg('Введи email и пароль', 'err'); return; }
-      if (password.length < 6) { showMsg('Пароль минимум 6 символов', 'err'); return; }
-      showMsg('Создаю аккаунт…');
-      sb.auth.signUp({ email: email, password: password }).then(function (res) {
-        if (res.error) { showMsg(res.error.message, 'err'); return; }
-        if (!res.data.session) {
-          showMsg('Аккаунт создан, но нужно подтвердить email по письму (если это включено в настройках Supabase). Если письмо не нужно — просто войди кнопкой "Войти".', 'ok');
-          return;
-        }
-        sessionStorage.removeItem('jp-synced');
-        showMsg('Готово', 'ok');
-        afterLogin(res.data.session.user);
-      });
-    });
-
-    document.getElementById('btnLogout').addEventListener('click', function () {
-      sb.auth.signOut().then(function () {
-        sessionStorage.removeItem('jp-synced');
-        location.reload();
-      });
-    });
-  }
-
-  document.getElementById('btnSkipLogin').addEventListener('click', function () {
-    localStorage.setItem('jp-skip-login', '1');
-    overlay.style.display = 'none';
-  });
 })();
 </script>
